@@ -56,7 +56,7 @@ export type ScoreComponent = {
   value: number;
   weight: number;
   contribution: number;
-  note?: string;
+  note?: string | undefined;
 };
 
 export type RankedVendor = {
@@ -160,10 +160,12 @@ export function skillFitFor(
 }
 
 function trendOf(vendor: VendorInput): "UP" | "DOWN" | "FLAT" {
-  const counts = { UP: 0, DOWN: 0, FLAT: 0 } as Record<string, number>;
+  const counts: Record<string, number> = { UP: 0, DOWN: 0, FLAT: 0 };
   for (const s of vendor.skillScores) counts[s.trend] = (counts[s.trend] ?? 0) + 1;
-  if ((counts.UP ?? 0) > (counts.DOWN ?? 0)) return "UP";
-  if ((counts.DOWN ?? 0) > (counts.UP ?? 0)) return "DOWN";
+  const up = counts["UP"] ?? 0;
+  const down = counts["DOWN"] ?? 0;
+  if (up > down) return "UP";
+  if (down > up) return "DOWN";
   return "FLAT";
 }
 
