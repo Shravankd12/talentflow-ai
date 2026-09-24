@@ -1053,7 +1053,7 @@ export async function updateOfferStatus(input: {
   actor: AuditActor;
   reason?: string;
   candidateUserId?: string | null;
-  candidateName?: string;
+  candidateName?: string | undefined;
 }): Promise<void> {
   const patch: Tables["offers"]["Update"] = { status: input.status, updated_at: new Date().toISOString() };
   if (input.status === "ACCEPTED") patch.accepted_at = new Date().toISOString();
@@ -1107,7 +1107,7 @@ const ONBOARDING_TEMPLATE = [
 export async function startOnboarding(input: {
   offer: Offer;
   actor: AuditActor;
-  candidateName?: string;
+  candidateName?: string | undefined;
 }): Promise<void> {
   const { data: existing } = await supabase
     .from("onboarding_tasks")
